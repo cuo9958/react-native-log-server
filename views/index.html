@@ -1,0 +1,37 @@
+{{extend '../views/layout.html'}} {{block 'title'}}日志{{/block}} {{block 'content'}}
+<style>
+    #list{
+        margin: 0 auto;
+        width: 1000px;
+    }
+    .item{
+        margin: 10px 0;
+        word-break: break-all;
+        border: solid 1px #ccc;
+    }
+</style>
+<div id="list">
+   
+</div>
+<script src="/js/socket.io.js"></script>
+<script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+<script>
+    $(function(){
+        var list=$("#list");
+        var socket = io('http://127.0.0.1:3000');
+        socket.on('connect', function () { 
+        });
+        socket.on('log', function (data) {
+            console.log(...data);
+            if(data.constructor==Array){
+                for (var index = 0; index < data.length; index++) {
+                    var item = data[index];
+                    list.append("<div class='item'>"+JSON.stringify(item)+"</div>");
+                }
+            }else{
+                list.append("<div class='item'>"+JSON.stringify(data)+"</div>");
+            }
+            $(window).scrollTop(list.height());
+         });
+    })
+</script> {{/block}}
