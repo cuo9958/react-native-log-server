@@ -24,7 +24,8 @@ app.get('/', function(req, res, next) {
   res.render('index');
 });
 app.get('/test',function(req,res,next){
-  let data=req.query.data;
+  console.log(req.headers);
+  let data=decodeURIComponent(req.query.data);
   try{
     data=JSON.parse(data);
   }catch(e){}
