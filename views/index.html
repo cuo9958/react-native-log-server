@@ -10,6 +10,7 @@
         border: solid 1px #ccc;
     }
 </style>
+<button id="btn1">按钮</button>
 <div id="list">
    
 </div>
@@ -22,16 +23,21 @@
         socket.on('connect', function () { 
         });
         socket.on('log', function (data) {
-            console.log(...data);
+            
             if(data.constructor==Array){
+                console.log(...data);return;
                 for (var index = 0; index < data.length; index++) {
                     var item = data[index];
                     list.append("<div class='item'>"+JSON.stringify(item)+"</div>");
                 }
             }else{
+                console.log(data);return;
                 list.append("<div class='item'>"+JSON.stringify(data)+"</div>");
             }
             $(window).scrollTop(list.height());
+         });
+
+         $("#btn1").click(function(){
          });
     })
 </script> {{/block}}

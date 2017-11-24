@@ -4,7 +4,7 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
-
+var soketio=require('./sockets');
 var app = express();
 
 // view engine setup
@@ -23,6 +23,14 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.get('/', function(req, res, next) {
   res.render('index');
 });
+app.get('/test',function(req,res,next){
+  let data=req.query.data;
+  try{
+    data=JSON.parse(data);
+  }catch(e){}
+  soketio.emitMsg(data);
+  res.end('');
+})
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
