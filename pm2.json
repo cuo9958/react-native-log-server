@@ -1,0 +1,14 @@
+{
+    "apps": [{
+        "name": "log-server",
+        "script": "bin/www",
+        "cwd": "/space/react-native-log-server",
+        "ignore_watch": [
+            "node_modules",
+            "logs"
+        ],
+        "env": {
+            "PORT": "8002"
+        }
+    }]
+}
