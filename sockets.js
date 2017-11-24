@@ -5,6 +5,7 @@ socketio.getServer = function (server) {
      io = socket_io(server);
     io.sockets.on("connection",function(socket){
         console.log("连接成功");
+        console.log(socket.handshake.query.token)
         socket.on("log",function(obj){
             io.emit("log",obj);
         })

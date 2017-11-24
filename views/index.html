@@ -19,7 +19,11 @@
 <script>
     $(function(){
         var list=$("#list");
-        var socket = io('http://127.0.0.1:3000');
+        var socket = io(window.location.origin,{
+            query:{
+                token:"client"
+            }
+        });
         socket.on('connect', function () { 
         });
         socket.on('log', function (data) {
