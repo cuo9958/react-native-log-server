@@ -20,9 +20,9 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.get('/', function(req, res, next) {
-  res.render('index');
-});
+//路由
+app.use('/',require('./routes/index'));
+
 app.get('/test',function(req,res,next){
   console.log(req.headers);
   let data=decodeURIComponent(req.query.data);
