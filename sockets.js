@@ -16,4 +16,19 @@ socketio.emitMsg=function(msg){
         io.emit("log",msg);
     }
 }
+socketio.emitInfo=function(msg){
+    if(io){
+        io.emit("info",msg);
+    }
+}
+socketio.emitWarm=function(msg){
+    if(io){
+        io.emit("warm",msg);
+    }
+}
+socketio.emitErr=function(msg){
+    if(io){
+        io.emit("err",msg);
+    }
+}
 module.exports = socketio; 

@@ -6,9 +6,11 @@
       </div>
       <Collapse accordion>
         <Panel v-for="(item,index) of errList" :key="index">
-            史蒂夫·乔布斯
-            <p slot="content">史蒂夫·乔布斯（Steve Jobs），1955年2月24日生于美国加利福尼亚州旧金山，美国发明家、企业家、美国苹果公司联合创办人。</p>
-        </Panel>
+           {{item.time}}
+            <p slot="content">
+              {{JSON.stringify(item)}}
+            </p>
+           </Panel>
     </Collapse>
     </div>
     <div class="list-box">
@@ -17,9 +19,11 @@
       </div>
       <Collapse accordion>
         <Panel v-for="(item,index) of warmList" :key="index">
-            史蒂夫·乔布斯
-            <p slot="content">史蒂夫·乔布斯（Steve Jobs），1955年2月24日生于美国加利福尼亚州旧金山，美国发明家、企业家、美国苹果公司联合创办人。</p>
-        </Panel>
+            {{item.time}}
+            <p slot="content">
+              {{JSON.stringify(item)}}
+            </p>
+            </Panel>
     </Collapse>
     </div>
     <div class="list-box">
@@ -28,12 +32,14 @@
       </div>
       <Collapse accordion>
        <Panel v-for="(item,index) of infoList" :key="index">
-            史蒂夫·乔布斯
-            <p slot="content">史蒂夫·乔布斯（Steve Jobs），1955年2月24日生于美国加利福尼亚州旧金山，美国发明家、企业家、美国苹果公司联合创办人。</p>
+            {{item.time}}
+            <p slot="content">
+              {{JSON.stringify(item)}}
+            </p>
         </Panel>
     </Collapse>
     </div>
-
+    <!-- <Button @click="test" type="primary">测试</Button> -->
   </div>
 </template>
 
@@ -52,18 +58,36 @@ export default {
     };
   },
   async mounted() {
-    // const socketuri=window.location.origin;
-    const socketuri = "http://120.78.57.59:3000";
+    const socketuri=window.location.origin;
+    // const socketuri = "http://120.78.57.59:3000";
+    // const socketuri = "http://127.0.0.1:8090";
     var socket = socketio(socketuri, {
       query: {
         token: "client"
       }
     });
-    socket.on("connect", function() {});
+    socket.on("info", data => {
+      data.time = new Date();
+      this.infoList.unshift(data);
+      this.infoCount++;
+    });
+    socket.on("warm", data => {
+      data.time = new Date();
+      this.warmList.unshift(data);
+      this.warmCount++;
+    });
+    socket.on("err", data => {
+      data.time = new Date();
+      this.errList.unshift(data);
+      this.errCount++;
+    });
     this.refresh();
   },
   methods: {
-    async refresh() {}
+    async refresh() {},
+    test() {
+      fetch("http://127.0.0.1:8090/info?id=1");
+    }
   }
 };
 </script>

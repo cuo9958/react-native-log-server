@@ -8,7 +8,10 @@
             "type": "node",
             "request": "launch",
             "name": "启动服务",
-            "program": "${workspaceFolder}/bin/www"
+            "program": "${workspaceFolder}/bin/www",
+            "env": {
+                "PORT":"8090"
+            }
         }
     ]
 }

@@ -6,3 +6,4 @@ bin/
 src/
 common/
 node_modules/**
+sockets.js
