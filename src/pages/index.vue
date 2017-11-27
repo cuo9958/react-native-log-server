@@ -6,7 +6,7 @@
       </div>
       <Collapse accordion>
         <Panel v-for="(item,index) of errList" :key="index">
-           {{item.data[0]}}{{item.time}}
+           {{item.data[0]}}{{item.time|format}}
             <p slot="content" class="txts">
               {{JSON.stringify(item)}}
             </p>
@@ -19,7 +19,7 @@
       </div>
       <Collapse accordion>
         <Panel v-for="(item,index) of warmList" :key="index">
-            {{item.data[0]}}}{{item.time}}
+            {{item.data[0]}}}{{item.time|format}}
             <p slot="content" class="txts">
               {{JSON.stringify(item)}}
             </p>
@@ -32,7 +32,7 @@
       </div>
       <Collapse accordion>
        <Panel v-for="(item,index) of infoList" :key="index">
-            {{item.data[0]}}{{item.time}}
+            {{item.data[0]}}{{item.time |format}}
             <p slot="content" class="txts">
               {{JSON.stringify(item)}}
             </p>
@@ -99,6 +99,18 @@ export default {
     async refresh() {},
     test() {
       fetch("http://127.0.0.1:8090/info?id=1");
+    }
+  },
+  filters:{
+    format(v){
+      const str='yyyy-MM-dd hh:mm:ss'
+      str=str.replace('yyyy',v.getFullYear());
+      str=str.replace('MM',v.getMonth()+1);
+      str=str.replace('dd',v.getDate());
+      str=str.replace('hh',v.getHours());
+      str=str.replace('mm',v.getMinutes());
+      str=str.replace('ss',v.getSeconds());
+      return str;
     }
   }
 };

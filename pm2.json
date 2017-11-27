@@ -2,7 +2,7 @@
     "apps": [{
         "name": "log-server",
         "script": "bin/www",
-        "cwd": "/space/react-native-log-server",
+        "cwd": "/fe/react-native-log-server",
         "ignore_watch": [
             "node_modules",
             "logs"
