@@ -58,7 +58,7 @@ export default {
     };
   },
   async mounted() {
-    const socketuri=window.location.origin;
+    const socketuri = window.location.origin;
     // const socketuri = "http://120.78.57.59:3000";
     // const socketuri = "http://127.0.0.1:8090";
     var socket = socketio(socketuri, {
@@ -69,17 +69,29 @@ export default {
     socket.on("info", data => {
       data.time = new Date();
       this.infoList.unshift(data);
-      this.infoCount++;
+      if (this.infoList.length > 99) {
+        this.infoList.pop();
+      } else {
+        this.infoCount++;
+      }
     });
     socket.on("warm", data => {
       data.time = new Date();
       this.warmList.unshift(data);
-      this.warmCount++;
+      if (this.warmList.length > 99) {
+        this.warmList.pop();
+      } else {
+        this.warmCount++;
+      }
     });
     socket.on("err", data => {
       data.time = new Date();
       this.errList.unshift(data);
-      this.errCount++;
+      if (this.errList.length > 99) {
+        this.errList.pop();
+      } else {
+        this.errCount++;
+      }
     });
     this.refresh();
   },
@@ -108,7 +120,7 @@ export default {
 .title-tip {
   float: right;
 }
-.txts{
+.txts {
   word-break: break-all;
 }
 </style>
