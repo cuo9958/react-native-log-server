@@ -20,9 +20,10 @@
         <TabPane :label="'错误:'+errCount" name="name1">
           <Collapse accordion>
               <Panel v-for="(item,index) of errList" :key="index">
-              {{item.data[0]}}{{item.time|format}}
+              {{item.name}}{{item.time|format}}
                 <p slot="content" class="txts">
-                  {{JSON.stringify(item)}}
+                  {{item.url}}<br />
+                  {{JSON.stringify(item.headers)}}
                 </p>
               </Panel>
         </Collapse>
@@ -30,9 +31,10 @@
         <TabPane :label="'警告:'+warmCount" name="name2">
           <Collapse accordion>
             <Panel v-for="(item,index) of warmList" :key="index">
-                {{item.data[0]}}}{{item.time|format}}
+                {{item.name}}}{{item.time|format}}
                 <p slot="content" class="txts">
-                  {{JSON.stringify(item)}}
+                  {{item.url}}<br />
+                  {{JSON.stringify(item.headers)}}
                 </p>
                 </Panel>
         </Collapse>
@@ -40,9 +42,10 @@
         <TabPane :label="'消息:'+infoCount" name="name3">
           <Collapse accordion>
             <Panel v-for="(item,index) of infoList" :key="index">
-                  {{item.data[0]}}{{item.time |format}}
+                  {{item.name}}{{item.time |format}}
                   <p slot="content" class="txts">
-                    {{JSON.stringify(item)}}
+                    {{item.url}}<br />
+                  {{JSON.stringify(item.headers)}}
                   </p>
               </Panel>
           </Collapse>
@@ -57,6 +60,10 @@ import socketio from "socket.io-client";
 import request from "../common/request";
 
 const test_url = "/api";
+const socketuri = window.location.origin;
+// const socketuri = "http://l-php40.ops.bj2.daling.com:8002";
+// const socketuri = "http://127.0.0.1:8090";
+
 export default {
   name: "index",
   data() {
@@ -105,16 +112,12 @@ export default {
     };
   },
   async mounted() {
-    const socketuri = window.location.origin;
-    // const socketuri = "http://120.78.57.59:3000";
-    // const socketuri = "http://127.0.0.1:8090";
     var socket = socketio(socketuri, {
       query: {
         token: "client"
       }
     });
     socket.on("info", data => {
-      console.log(data)
       data.time = new Date();
       this.infoList.unshift(data);
       if (this.infoList.length > 99) {
@@ -147,14 +150,14 @@ export default {
     async refresh() {
       let res = await request.getJson(test_url + "/get");
       this.namelist = res.data;
-      console.log(res);
     },
     async addName() {
       if (!this.formData.name) return;
       let res = await request.getJson(
         test_url + "/set?name=" + this.formData.name
       );
-      this.namelist.push(this.formData.name);
+      this.namelist.push({ name: this.formData.name });
+      this.formData.name = "";
     },
     remove(index) {
       var name = this.namelist.splice(index, 1);
