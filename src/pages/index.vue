@@ -1,50 +1,62 @@
 <template>
   <div class="main">
-    <div class="list-box">
-      <div class="box-title">
-        错误<Badge class="title-tip" :count="errCount"></Badge>
-      </div>
-      <Collapse accordion>
-        <Panel v-for="(item,index) of errList" :key="index">
-           {{item.data[0]}}{{item.time|format}}
-            <p slot="content" class="txts">
-              {{JSON.stringify(item)}}
-            </p>
-           </Panel>
-    </Collapse>
+    <div class="setting">
+      <Form  label-position="right" :label-width="1" style="width:300px">
+          <FormItem>
+              <Row>
+                <Col span="18">
+                <Input v-model="formData.name" placeholder="请填写拦截值"></Input>
+                </Col>
+                <Col span="4" offset="1">
+                <Button @click="addName" type="primary">添加</Button>
+                </Col>
+              </Row>
+          </FormItem>
+      </Form>
+<Table stripe :columns="columns" :data="namelist"></Table>
     </div>
     <div class="list-box">
-      <div class="box-title">
-        警告<Badge class="title-tip" :count="warmCount"></Badge>
-      </div>
-      <Collapse accordion>
-        <Panel v-for="(item,index) of warmList" :key="index">
-            {{item.data[0]}}}{{item.time|format}}
-            <p slot="content" class="txts">
-              {{JSON.stringify(item)}}
-            </p>
-            </Panel>
-    </Collapse>
+      <Tabs type="card">
+        <TabPane :label="'错误:'+errCount" name="name1">
+          <Collapse accordion>
+              <Panel v-for="(item,index) of errList" :key="index">
+              {{item.data[0]}}{{item.time|format}}
+                <p slot="content" class="txts">
+                  {{JSON.stringify(item)}}
+                </p>
+              </Panel>
+        </Collapse>
+        </TabPane>
+        <TabPane :label="'警告:'+warmCount" name="name2">
+          <Collapse accordion>
+            <Panel v-for="(item,index) of warmList" :key="index">
+                {{item.data[0]}}}{{item.time|format}}
+                <p slot="content" class="txts">
+                  {{JSON.stringify(item)}}
+                </p>
+                </Panel>
+        </Collapse>
+        </TabPane>
+        <TabPane :label="'消息:'+infoCount" name="name3">
+          <Collapse accordion>
+            <Panel v-for="(item,index) of infoList" :key="index">
+                  {{item.data[0]}}{{item.time |format}}
+                  <p slot="content" class="txts">
+                    {{JSON.stringify(item)}}
+                  </p>
+              </Panel>
+          </Collapse>
+        </TabPane>
+    </Tabs>
     </div>
-    <div class="list-box">
-      <div class="box-title">
-        消息<Badge class="title-tip" :count="infoCount"></Badge>
-      </div>
-      <Collapse accordion>
-       <Panel v-for="(item,index) of infoList" :key="index">
-            {{item.data[0]}}{{item.time |format}}
-            <p slot="content" class="txts">
-              {{JSON.stringify(item)}}
-            </p>
-        </Panel>
-    </Collapse>
-    </div>
-    <!-- <Button @click="test" type="primary">测试</Button> -->
   </div>
 </template>
 
 <script>
 import socketio from "socket.io-client";
+import request from "../common/request";
+
+const test_url = "/api";
 export default {
   name: "index",
   data() {
@@ -54,7 +66,42 @@ export default {
       warmList: [],
       warmCount: 0,
       infoList: [],
-      infoCount: 0
+      infoCount: 0,
+      formData: {
+        name: ""
+      },
+      columns: [
+        {
+          title: "name",
+          key: "name"
+        },
+        {
+          title: "Action",
+          key: "action",
+          width: 150,
+          align: "center",
+          render: (h, params) => {
+            return h("div", [
+              h(
+                "Button",
+                {
+                  props: {
+                    type: "error",
+                    size: "small"
+                  },
+                  on: {
+                    click: () => {
+                      this.remove(params.index);
+                    }
+                  }
+                },
+                "Delete"
+              )
+            ]);
+          }
+        }
+      ],
+      namelist: []
     };
   },
   async mounted() {
@@ -67,6 +114,7 @@ export default {
       }
     });
     socket.on("info", data => {
+      console.log(data)
       data.time = new Date();
       this.infoList.unshift(data);
       if (this.infoList.length > 99) {
@@ -96,20 +144,32 @@ export default {
     this.refresh();
   },
   methods: {
-    async refresh() {},
-    test() {
-      fetch("http://127.0.0.1:8090/info?id=1");
+    async refresh() {
+      let res = await request.getJson(test_url + "/get");
+      this.namelist = res.data;
+      console.log(res);
+    },
+    async addName() {
+      if (!this.formData.name) return;
+      let res = await request.getJson(
+        test_url + "/set?name=" + this.formData.name
+      );
+      this.namelist.push(this.formData.name);
+    },
+    remove(index) {
+      var name = this.namelist.splice(index, 1);
+      request.getJson(test_url + "/del?name=" + name[0].name);
     }
   },
-  filters:{
-    format(v){
-      let str='yyyy-MM-dd hh:mm:ss'
-      str=str.replace('yyyy',v.getFullYear());
-      str=str.replace('MM',v.getMonth()+1);
-      str=str.replace('dd',v.getDate());
-      str=str.replace('hh',v.getHours());
-      str=str.replace('mm',v.getMinutes());
-      str=str.replace('ss',v.getSeconds());
+  filters: {
+    format(v) {
+      let str = "yyyy-MM-dd hh:mm:ss";
+      str = str.replace("yyyy", v.getFullYear());
+      str = str.replace("MM", v.getMonth() + 1);
+      str = str.replace("dd", v.getDate());
+      str = str.replace("hh", v.getHours());
+      str = str.replace("mm", v.getMinutes());
+      str = str.replace("ss", v.getSeconds());
       return str;
     }
   }
@@ -124,7 +184,7 @@ export default {
 .list-box {
   flex: 1;
   margin: 0 5px;
-  max-width: 30%;
+  max-width: 70%;
 }
 .box-title {
   padding: 10px;
@@ -134,5 +194,8 @@ export default {
 }
 .txts {
   word-break: break-all;
+}
+.setting {
+  width: 300px;
 }
 </style>

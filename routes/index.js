@@ -1,13 +1,42 @@
-var express = require('express');
-var router = express.Router();
-var soketio = require('../sockets');
+const express = require('express');
+const router = express.Router();
+const soketio = require('../sockets');
+
+let cacheList = [];
+let nameList = new Set();
 
 /* GET home page. */
 router.get('/', function (req, res, next) {
   res.render('index', {});
 });
-
-let cacheList = [];
+router.get('/api/set', function (req, res, next) {
+  if (req.query.name) {
+    nameList.add(req.query.name);
+  }
+  res.json({
+    code: 1
+  });
+});
+router.get('/api/get', function (req, res, next) {
+  let list=[];
+  nameList.forEach(item=>{
+    list.push({
+      name:item
+    })
+  })
+  res.json({
+    code: 1,
+    data:list
+  });
+});
+router.get('/api/del', function (req, res, next) {
+  if (req.query.name) {
+    nameList.delete(req.query.name)
+  }
+  res.json({
+    code: 1
+  });
+});
 
 function setCache(data) {
   let key = Date.now() + '' + (Math.random() * 1000 >> 0);
@@ -45,53 +74,59 @@ function getHeader(headers) {
   }
 }
 
-router.post('/info', function (req, res, next) {
-  if (!req.body.data) return res.end('');
-  let list = JSON.parse(req.body.data);
+function getData(req) {
+  let list = req.body.data;
   let id = ''
-  if (req.body.data.length > 200) {
+  if (req.body.data) {
     id = setCache(list);
-    list.length = 2;
   }
   let data = {
+    id: id,
     headers: getHeader(req.headers),
-    data: list,
-    id: id
+    name: req.body.name,
+    url: req.body.url,
+    opt: req.body.opt
   }
+  return data;
+}
+
+router.post('/info', function (req, res, next) {
+  if (!req.headers.name) return res.end('');
+  if (!nameList.has(req.headers.name)) {
+    next();
+    return;
+  }
+  if (!req.body.name) return res.end('');
+  let data = getData(req);
   soketio.emitInfo(data);
   res.end('');
 });
 router.post('/warm', function (req, res, next) {
-  if (!req.body.data) return res.end('');
-  let list = JSON.parse(req.body.data);
-  let id = ''
-  if (req.body.data.length > 200) {
-    id = setCache(list);
-    list.length = 2;
+  if (!req.headers.name) return res.end('');
+  if (!nameList.has(req.headers.name)) {
+    next();
+    return;
   }
-  let data = {
-    headers: getHeader(req.headers),
-    data: list,
-    id: id
-  }
+  if (!req.body.name) return res.end('');
+  let data = getData(req);
   soketio.emitWarm(data);
   res.end('');
 });
 router.post('/err', function (req, res, next) {
-  if (!req.body.data) return res.end('');
-  let list = JSON.parse(req.body.data);
-  let id = ''
-  if (req.body.data.length > 200) {
-    id = setCache(list);
-    list.length = 2;
+  if (!req.headers.name) return res.end('');
+  if (!nameList.has(req.headers.name)) {
+    next();
+    return;
   }
-  let data = {
-    headers: getHeader(req.headers),
-    data: list,
-    id: id
-  }
+  if (!req.body.name) return res.end('');
+  let data = getData(req);
   soketio.emitErr(data);
   res.end('');
 });
+
+router.use(function (req, res) {
+  res.status(404);
+  res.send('err');
+})
 
 module.exports = router;
