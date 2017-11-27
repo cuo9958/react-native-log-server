@@ -103,7 +103,7 @@ export default {
   },
   filters:{
     format(v){
-      const str='yyyy-MM-dd hh:mm:ss'
+      let str='yyyy-MM-dd hh:mm:ss'
       str=str.replace('yyyy',v.getFullYear());
       str=str.replace('MM',v.getMonth()+1);
       str=str.replace('dd',v.getDate());
