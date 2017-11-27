@@ -23,7 +23,7 @@
                         </Submenu>
                     </Menu>
                 </Col>
-                <Col span="19">
+                <Col span="19" style="overflow:scroll;">
                     <router-view/>
                 </Col>
           </Row>

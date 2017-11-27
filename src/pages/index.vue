@@ -6,8 +6,8 @@
       </div>
       <Collapse accordion>
         <Panel v-for="(item,index) of errList" :key="index">
-           {{item.time}}
-            <p slot="content">
+           {{item.data[0]}}{{item.time}}
+            <p slot="content" class="txts">
               {{JSON.stringify(item)}}
             </p>
            </Panel>
@@ -19,8 +19,8 @@
       </div>
       <Collapse accordion>
         <Panel v-for="(item,index) of warmList" :key="index">
-            {{item.time}}
-            <p slot="content">
+            {{item.data[0]}}}{{item.time}}
+            <p slot="content" class="txts">
               {{JSON.stringify(item)}}
             </p>
             </Panel>
@@ -32,8 +32,8 @@
       </div>
       <Collapse accordion>
        <Panel v-for="(item,index) of infoList" :key="index">
-            {{item.time}}
-            <p slot="content">
+            {{item.data[0]}}{{item.time}}
+            <p slot="content" class="txts">
               {{JSON.stringify(item)}}
             </p>
         </Panel>
@@ -100,11 +100,15 @@ export default {
 .list-box {
   flex: 1;
   margin: 0 5px;
+  max-width: 30%;
 }
 .box-title {
   padding: 10px;
 }
 .title-tip {
   float: right;
+}
+.txts{
+  word-break: break-all;
 }
 </style>
