@@ -22,15 +22,15 @@ router.get('/api/set', function (req, res, next) {
   });
 });
 router.get('/api/get', function (req, res, next) {
-  let list=[];
-  nameList.forEach(item=>{
+  let list = [];
+  nameList.forEach(item => {
     list.push({
-      name:item
+      name: item
     })
   })
   res.json({
     code: 1,
-    data:list
+    data: list
   });
 });
 router.get('/api/del', function (req, res, next) {
@@ -40,6 +40,20 @@ router.get('/api/del', function (req, res, next) {
   res.json({
     code: 1
   });
+});
+
+router.get('/api/getData', function (req, res, next) {
+  if (req.query.id) {
+    let data = getCache(id)
+    res.json({
+      code: 1,
+      data: data
+    });
+  } else {
+    res.json({
+      code: 0
+    });
+  }
 });
 
 function setCache(data) {

@@ -24,6 +24,7 @@
                 <p slot="content" class="txts">
                   {{item.url}}<br />
                   {{JSON.stringify(item.headers)}}
+                  <Button @click="see(item.id)" type="primary">查看数据</Button>
                 </p>
               </Panel>
         </Collapse>
@@ -35,6 +36,7 @@
                 <p slot="content" class="txts">
                   {{item.url}}<br />
                   {{JSON.stringify(item.headers)}}
+                  <Button @click="see(item.id)" type="primary">查看数据</Button>
                 </p>
                 </Panel>
         </Collapse>
@@ -46,6 +48,7 @@
                   <p slot="content" class="txts">
                     {{item.url}}<br />
                   {{JSON.stringify(item.headers)}}
+                  <Button @click="see(item.id)" type="primary">查看数据</Button>
                   </p>
               </Panel>
           </Collapse>
@@ -122,7 +125,6 @@ export default {
       }
     });
     socket.on("info", data => {
-      console.log(data)
       data.time = new Date();
       this.infoList.unshift(data);
       if (this.infoList.length > 99) {
@@ -167,6 +169,15 @@ export default {
     remove(index) {
       var name = this.namelist.splice(index, 1);
       request.getJson(test_url + "/del?name=" + name[0].name);
+    },
+    see(id){
+      let res = await request.getJson(test_url + "/getData");
+      if(!res||res.code!=1){
+        this.$Modal.info({
+            title: "数据",
+            content: JSON.stringify(res.data)
+        });
+      }
     }
   },
   filters: {
