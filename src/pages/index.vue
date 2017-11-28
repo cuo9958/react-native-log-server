@@ -122,6 +122,7 @@ export default {
       }
     });
     socket.on("info", data => {
+      console.log(data)
       data.time = new Date();
       this.infoList.unshift(data);
       if (this.infoList.length > 99) {
@@ -131,7 +132,6 @@ export default {
       }
     });
     socket.on("warm", data => {
-      console.log(data)
       data.time = new Date();
       this.warmList.unshift(data);
       if (this.warmList.length > 99) {
