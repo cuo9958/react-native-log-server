@@ -131,6 +131,7 @@ export default {
       }
     });
     socket.on("warm", data => {
+      console.log(data)
       data.time = new Date();
       this.warmList.unshift(data);
       if (this.warmList.length > 99) {
