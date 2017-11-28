@@ -128,9 +128,9 @@ router.post('/err', function (req, res, next) {
   res.end('');
 });
 
-router.use(function (req, res) {
-  res.status(404);
-  res.send('err');
-})
+// router.use(function (req, res) {
+//   res.status(404);
+//   res.send('err');
+// })
 
 module.exports = router;
