@@ -9,6 +9,9 @@ let nameList = new Set();
 router.get('/', function (req, res, next) {
   res.render('index', {});
 });
+router.get('/index', function (req, res, next) {
+  res.render('index', {});
+});
 
 router.get('/api/set', function (req, res, next) {
   if (req.query.name) {
