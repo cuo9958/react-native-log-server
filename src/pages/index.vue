@@ -171,8 +171,8 @@ export default {
       request.getJson(test_url + "/del?name=" + name[0].name);
     },
     async see(id){
-      let res = await request.getJson(test_url + "/getData");
-      if(!res||res.code!=1){
+      let res = await request.getJson(test_url + "/getData?id="+id);
+      if(res&&res.code==1){
         this.$Modal.info({
             title: "数据",
             content: JSON.stringify(res.data)
