@@ -93,6 +93,9 @@ function getData(req) {
   }
   return data;
 }
+router.get('/info', function (req, res, next) {
+  res.end('你好，再见。');
+});
 
 router.post('/info', function (req, res, next) {
   if (!req.headers.name) return res.end('');
