@@ -60,7 +60,7 @@ import socketio from "socket.io-client";
 import request from "../common/request";
 
 const test_url = "/api";
-const socketuri = window.location.origin;
+const socketuri = window.location.origin+window.location.pathname;
 // const socketuri = "http://l-php40.ops.bj2.daling.com:8002";
 // const socketuri = "http://127.0.0.1:8090";
 
