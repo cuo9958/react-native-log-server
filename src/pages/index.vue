@@ -63,7 +63,10 @@ const test_url = "api";
 const socketuri = window.location.origin + window.location.pathname;
 // const socketuri = "http://l-php40.ops.bj2.daling.com:8002";
 // const socketuri = "http://127.0.0.1:8090";
-
+const socket_path='/socket.io';
+if(window.location.pathname.indexOf('rnmonitor')>=0){
+  socket_path="/rnmonitor/socket.io"
+}
 export default {
   name: "index",
   data() {
@@ -113,7 +116,7 @@ export default {
   },
   async mounted() {
     var socket = socketio(socketuri, {
-      path: window.location.pathname + "socket.io",
+      path:socket_path,
       query: {
         token: "client"
       }
