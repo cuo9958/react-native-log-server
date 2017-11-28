@@ -24,7 +24,7 @@
                 <p slot="content" class="txts">
                   {{item.url}}<br />
                   {{JSON.stringify(item.headers)}}
-                  <Button @click="see(item.id)" type="primary">查看数据</Button>
+                  <Button @click="see(item.id)" size="small" type="primary">查看数据</Button>
                 </p>
               </Panel>
         </Collapse>
@@ -36,7 +36,7 @@
                 <p slot="content" class="txts">
                   {{item.url}}<br />
                   {{JSON.stringify(item.headers)}}
-                  <Button @click="see(item.id)" type="primary">查看数据</Button>
+                  <Button @click="see(item.id)" size="small" type="primary">查看数据</Button>
                 </p>
                 </Panel>
         </Collapse>
@@ -48,7 +48,7 @@
                   <p slot="content" class="txts">
                     {{item.url}}<br />
                   {{JSON.stringify(item.headers)}}
-                  <Button @click="see(item.id)" type="primary">查看数据</Button>
+                  <Button @click="see(item.id)" size="small" type="primary">查看数据</Button>
                   </p>
               </Panel>
           </Collapse>
@@ -216,5 +216,8 @@ export default {
 }
 .setting {
   width: 300px;
+}
+.ivu-modal-confirm-body{
+  word-break: break-all;
 }
 </style>

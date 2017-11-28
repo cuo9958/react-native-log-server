@@ -44,7 +44,7 @@ router.get('/api/del', function (req, res, next) {
 
 router.get('/api/getData', function (req, res, next) {
   if (req.query.id) {
-    let data = getCache(id)
+    let data = getCache(req.query.id)
     res.json({
       code: 1,
       data: data
@@ -60,7 +60,7 @@ function setCache(data) {
   let key = Date.now() + '' + (Math.random() * 1000 >> 0);
   cacheList.push({
     id: key,
-    data: data
+    data: JSON.stringify(data)
   })
   if (cacheList.length > 500) {
     cacheList.shift();
@@ -70,7 +70,13 @@ function setCache(data) {
 
 function getCache(key) {
   let list = cacheList.filter(item => item.id == key);
-  if (list.length > 0) return list[0];
+  if (list.length > 0) {
+    try{
+      return JSON.parse(list[0]);
+    }catch(e){
+      return list[0]
+    }
+  }
   return {};
 }
 
