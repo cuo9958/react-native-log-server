@@ -4,6 +4,7 @@ const soketio = require('../sockets');
 
 let cacheList = [];
 let nameList = new Set();
+nameList.add("dev")
 
 /* GET home page. */
 router.get('/', function (req, res, next) {
