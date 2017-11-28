@@ -22,7 +22,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 //路由
 app.use('/',require('./routes/index'));
-app.use('/rnmonitor/',require('./routes/index'));
+app.use('/rnmonitor',require('./routes/index'));
 
 app.get('/test',function(req,res,next){
   console.log(req.headers);
