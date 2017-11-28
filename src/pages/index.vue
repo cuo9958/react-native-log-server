@@ -113,7 +113,7 @@ export default {
   },
   async mounted() {
     var socket = socketio(socketuri, {
-      path: window.location.pathname + "/socket.io",
+      path: window.location.pathname + "socket.io",
       query: {
         token: "client"
       }
