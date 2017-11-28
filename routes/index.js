@@ -9,10 +9,7 @@ let nameList = new Set();
 router.get('/', function (req, res, next) {
   res.render('index', {});
 });
-//rnmonitor
-router.get('/rnmonitor/', function (req, res, next) {
-  res.render('index', {});
-});
+
 router.get('/api/set', function (req, res, next) {
   if (req.query.name) {
     nameList.add(req.query.name);
