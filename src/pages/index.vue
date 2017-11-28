@@ -113,6 +113,7 @@ export default {
   },
   async mounted() {
     var socket = socketio(socketuri, {
+      path: '/rnmonitor/socket.io',
       query: {
         token: "client"
       }
