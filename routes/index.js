@@ -114,6 +114,7 @@ function getData(req) {
   return data;
 }
 router.get('/info', function (req, res, next) {
+  soketio.emitInfo(req.query);
   res.end('你好，再见。');
 });
 
