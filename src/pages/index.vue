@@ -170,7 +170,7 @@ export default {
       var name = this.namelist.splice(index, 1);
       request.getJson(test_url + "/del?name=" + name[0].name);
     },
-    see(id){
+    async see(id){
       let res = await request.getJson(test_url + "/getData");
       if(!res||res.code!=1){
         this.$Modal.info({
