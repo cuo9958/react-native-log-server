@@ -91,4 +91,7 @@ body {
   padding: 5px 0;
   color: #9ea7b4;
 }
+.ivu-modal-confirm-body{
+  word-break: break-all;
+}
 </style>

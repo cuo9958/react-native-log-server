@@ -217,7 +217,5 @@ export default {
 .setting {
   width: 300px;
 }
-.ivu-modal-confirm-body{
-  word-break: break-all;
-}
+
 </style>
