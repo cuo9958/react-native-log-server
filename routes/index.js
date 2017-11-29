@@ -61,7 +61,7 @@ function setCache(data) {
   let key = Date.now() + '' + (Math.random() * 1000 >> 0);
   cacheList.push({
     id: key,
-    data: JSON.stringify(data)
+    data:data
   })
   if (cacheList.length > 500) {
     cacheList.shift();
@@ -73,9 +73,8 @@ function getCache(key) {
   let list = cacheList.filter(item => item.id == key);
   if (list.length > 0) {
     try{
-      return JSON.parse(list[0]);
-    }catch(e){
       return list[0]
+    }catch(e){
     }
   }
   return {};
