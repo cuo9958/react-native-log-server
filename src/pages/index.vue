@@ -32,7 +32,7 @@
         <TabPane :label="'警告:'+warmCount" name="name2">
           <Collapse accordion>
             <Panel v-for="(item,index) of warmList" :key="index">
-                {{item.name}}}{{item.time|format}}
+                {{item.name}}{{item.time|format}}
                 <p slot="content" class="txts">
                   {{item.url}}<br />
                   {{JSON.stringify(item.headers)}}
