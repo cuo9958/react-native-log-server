@@ -5,7 +5,10 @@
         "cwd": "/fe/react-native-log-server",
         "ignore_watch": [
             "node_modules",
-            "logs"
+            "logs",
+            "src",
+            "config",
+            "build"
         ],
         "env": {
             "PORT": "8002"

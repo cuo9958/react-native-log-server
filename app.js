@@ -25,16 +25,6 @@ app.use('/rnmonitor',express.static(path.join(__dirname, 'public')));
 app.use('/',require('./routes/index'));
 app.use('/rnmonitor',require('./routes/index'));
 
-app.get('/test',function(req,res,next){
-  console.log(req.headers);
-  let data=decodeURIComponent(req.query.data);
-  try{
-    data=JSON.parse(data);
-  }catch(e){}
-  soketio.emitMsg(data);
-  res.end('');
-})
-
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
   var err = new Error('Not Found');

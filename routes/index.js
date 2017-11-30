@@ -63,7 +63,7 @@ function setCache(data) {
     id: key,
     data:data
   })
-  if (cacheList.length > 500) {
+  if (cacheList.length > 200) {
     cacheList.shift();
   }
   return key;
