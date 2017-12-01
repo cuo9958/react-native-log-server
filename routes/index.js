@@ -8,6 +8,7 @@ nameList.add("dev")
 
 /* GET home page. */
 router.get('/', function (req, res, next) {
+  if(!req.headers.host)return res.end('');
   console.log(`访问来源地址：${req.headers.host},${req.url};上一个页面地址：${req.headers.referer}`)
   res.render('index', {});
 });
