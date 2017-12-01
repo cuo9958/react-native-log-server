@@ -52,7 +52,7 @@ router.get('/api/getData', function (req, res, next) {
     let data = getCache(req.query.id)
     res.json({
       code: 1,
-      data: data
+      data: data.data
     });
   } else {
     res.json({
@@ -72,10 +72,8 @@ router.get('/api/getlist', function (req, res, next) {
 
 function setCache(data) {
   let key = Date.now() + '' + (Math.random() * 1000 >> 0);
-  cacheList.push({
-    id: key,
-    data: data
-  })
+  data.id = key;
+  cacheList.push(data)
   if (cacheList.length > 200) {
     cacheList.shift();
   }
@@ -111,7 +109,7 @@ function getHeader(headers) {
 }
 
 function getData(req) {
-  let list = req.body.data;
+  let list = req.body;
   let id = ''
   if (req.body.data) {
     id = setCache(list);
