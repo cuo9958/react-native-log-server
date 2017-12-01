@@ -62,10 +62,12 @@
 import socketio from "socket.io-client";
 import request from "../common/request";
 
+// const test_url = "http://127.0.0.1:8090/api";
 const test_url = "api";
 const socketuri = window.location.origin + window.location.pathname;
 // const socketuri = "http://l-php40.ops.bj2.daling.com:8002";
 // const socketuri = "http://127.0.0.1:8090";
+
 let socket_path='/socket.io';
 if(window.location.pathname.indexOf('rnmonitor')>=0){
   socket_path="/rnmonitor/socket.io"
@@ -163,6 +165,7 @@ export default {
         item.time = new Date();
         this.infoList.push(item)
       }
+      this.infoCount+=msgs.data.length;
     },
     async addName() {
       if (!this.formData.name) return;
