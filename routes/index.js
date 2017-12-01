@@ -8,6 +8,7 @@ nameList.add("dev")
 
 /* GET home page. */
 router.get('/', function (req, res, next) {
+  console.log(`访问来源地址：${req.headers.host},${req.url};上一个页面地址：${req.headers.referer}`)
   res.render('index', {});
 });
 router.get('/index', function (req, res, next) {
@@ -23,6 +24,8 @@ router.get('/api/set', function (req, res, next) {
   });
 });
 router.get('/api/get', function (req, res, next) {
+  if(req.headers.referer.indexOf(req.headers.host)<0)return res.end('');
+
   let list = [];
   nameList.forEach(item => {
     list.push({
