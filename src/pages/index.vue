@@ -157,6 +157,12 @@ export default {
     async refresh() {
       let res = await request.getJson(test_url + "/get");
       this.namelist = res.data;
+      let msgs=await request.getJson(test_url+'/getlist');
+      for (let index = 0; index < msgs.data.length; index++) {
+        const item = msgs.data[index];
+        item.time = new Date();
+        this.infoList.push(item)
+      }
     },
     async addName() {
       if (!this.formData.name) return;

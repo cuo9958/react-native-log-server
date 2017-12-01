@@ -9,7 +9,7 @@ nameList.add("dev")
 /* GET home page. */
 router.get('/', function (req, res, next) {
   console.log(`访问来源地址：${JSON.stringify(req.headers)};`)
-  if(!req.headers.host)return res.end('');
+  if (!req.headers.host) return res.end('');
   res.render('index', {});
 });
 router.get('/index', function (req, res, next) {
@@ -25,7 +25,7 @@ router.get('/api/set', function (req, res, next) {
   });
 });
 router.get('/api/get', function (req, res, next) {
-  if(req.headers.referer.indexOf(req.headers.host)<0)return res.end('');
+  if (req.headers.referer.indexOf(req.headers.host) < 0) return res.end('');
 
   let list = [];
   nameList.forEach(item => {
@@ -60,12 +60,21 @@ router.get('/api/getData', function (req, res, next) {
     });
   }
 });
+/**
+ * 获取缓存消息
+ */
+router.get('/api/getlist', function (req, res, next) {
+  res.json({
+    code: 1,
+    data: cacheList
+  });
+});
 
 function setCache(data) {
   let key = Date.now() + '' + (Math.random() * 1000 >> 0);
   cacheList.push({
     id: key,
-    data:data
+    data: data
   })
   if (cacheList.length > 200) {
     cacheList.shift();
@@ -76,10 +85,9 @@ function setCache(data) {
 function getCache(key) {
   let list = cacheList.filter(item => item.id == key);
   if (list.length > 0) {
-    try{
+    try {
       return list[0]
-    }catch(e){
-    }
+    } catch (e) {}
   }
   return {};
 }

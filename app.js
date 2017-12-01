@@ -4,7 +4,7 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
-var soketio=require('./sockets');
+var soketio = require('./sockets');
 var app = express();
 
 // view engine setup
@@ -16,14 +16,17 @@ app.engine('html', require('express-art-template'));
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 app.use(logger('dev'));
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.urlencoded({
+  extended: false
+}));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
-app.use('/rnmonitor',express.static(path.join(__dirname, 'public')));
+app.use('/rnmonitor', express.static(path.join(__dirname, 'public')));
 
+const index = require('./routes/index');
 //路由
-app.use('/',require('./routes/index'));
-app.use('/rnmonitor',require('./routes/index'));
+app.use('/', index);
+app.use('/rnmonitor', index);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
