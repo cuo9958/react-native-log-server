@@ -11,7 +11,8 @@
             "build"
         ],
         "env": {
-            "PORT": "8002"
+            "PORT": "8002",
+            "NODE_ENV":"production"
         }
     }]
 }
