@@ -105,6 +105,7 @@ function getHeader(headers) {
     jsversion: headers.jsversion,
     utoken: headers.utoken,
     platform: headers.platform,
+    uid:headers.uid
   }
 }
 
