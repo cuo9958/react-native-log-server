@@ -130,6 +130,7 @@ router.get('/info', function (req, res, next) {
 });
 
 router.post('/info', function (req, res, next) {
+  console.log(`访问来源地址：${JSON.stringify(req.headers)};`)
   if (!req.headers.name) return res.end('');
   if (!nameList.has(req.headers.name)) {
     next();
