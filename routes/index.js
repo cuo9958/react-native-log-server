@@ -5,6 +5,7 @@ const soketio = require('../sockets');
 let cacheList = [];
 let nameList = new Set();
 nameList.add("dev")
+const filters=['10.0.31.18'];
 
 /* GET home page. */
 router.get('/', function (req, res, next) {
@@ -124,12 +125,19 @@ function getData(req) {
   }
   return data;
 }
+//检查ip是否在排除范围
+function inFilters(ip){
+  let res= filters.filter(item=>item==ip);
+  return res.length>0;
+}
+
 router.get('/info', function (req, res, next) {
   soketio.emitInfo(req.query);
   res.end('你好，再见。');
 });
 
 router.post('/info', function (req, res, next) {
+  if(inFilters(req.ip))return res.end('');
   console.log(`访问来源地址：${JSON.stringify(req.ip)};`)
   if (!req.headers.name) return res.end('');
   if (!nameList.has(req.headers.name)) {
@@ -142,6 +150,7 @@ router.post('/info', function (req, res, next) {
   res.end('');
 });
 router.post('/warm', function (req, res, next) {
+  if(inFilters(req.ip))return res.end('');
   if (!req.headers.name) return res.end('');
   if (!nameList.has(req.headers.name)) {
     next();
@@ -153,6 +162,7 @@ router.post('/warm', function (req, res, next) {
   res.end('');
 });
 router.post('/err', function (req, res, next) {
+  if(inFilters(req.ip))return res.end('');
   if (!req.headers.name) return res.end('');
   if (!nameList.has(req.headers.name)) {
     next();
