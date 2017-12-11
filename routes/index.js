@@ -5,7 +5,8 @@ const soketio = require('../sockets');
 let cacheList = [];
 let nameList = new Set();
 nameList.add("dev")
-const filters=['10.0.31.18'];
+// const filters=['10.0.31.18'];
+const filters=[];
 
 /* GET home page. */
 router.get('/', function (req, res, next) {
