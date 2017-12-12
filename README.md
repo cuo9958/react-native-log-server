@@ -1,10 +1,18 @@
 # react-native-log-server
 拦截react-native的日志输出，将日志转到node服务上。这样就把模拟器的速度提升至少5倍。
 
+## 服务器发布顺序
+
+- `git pull`拉取最新代码
+- `rm -rf node_modules`删除依赖
+- `npm i`安装依赖
+- `npm run build`生成界面
+- `pm2 restart xxxx`刷新服务,xxxx对应服务名称(或者使用单独的守护进程代码)
+
 ## 启动服务
 
 - 运行`npm run start`启动vue，默认端口8080
-- 运行vscode的服务，启动express，默认端口8002
+- 运行 vscode的服务，启动express，默认端口8002
 - 启动pm2，使用pm2.json文件启动
 
 ## 启动日志
