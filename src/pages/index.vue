@@ -163,7 +163,7 @@ export default {
       for (let index = 0; index < msgs.data.length; index++) {
         const item = msgs.data[index];
         item.time = new Date();
-        this.infoList.push(item)
+        this.infoList.unshift(item)
       }
       this.infoCount+=msgs.data.length;
     },
