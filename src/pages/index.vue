@@ -13,17 +13,32 @@
               </Row>
           </FormItem>
       </Form>
-<Table stripe :columns="columns" :data="namelist"></Table>
+      <Table stripe :columns="columns" :data="namelist"></Table>
     </div>
     <div class="list-box">
+      <Form  label-position="right" :label-width="1" >
+        <FormItem>
+              <Row>
+                <Col span="9">
+                <Input v-model="formData.tag" placeholder="过滤tag"></Input>
+                </Col>
+                <Col span="9" offset="1">
+                <Input v-model="formData.ip" placeholder="过滤ip"></Input>
+                </Col>
+                <Col span="4" offset="1">
+                <Button @click="start" type="primary">清除日志</Button>
+                </Col>
+              </Row>
+          </FormItem>
+      </Form>
       <Tabs type="card">
         <TabPane :label="'错误:'+errCount" name="name1">
           <Collapse accordion>
               <Panel v-for="(item,index) of errList" :key="index">
-              {{item.name}}{{item.time|format}}
+              {{item.name}}@{{item.date|format}};ip:{{item.ip}}
                 <p slot="content" class="txts">
-                  {{item.url}}<br />
-                  {{JSON.stringify(item.headers)}}
+                  请求地址:{{item.url}}<br />
+                  {{JSON.stringify(item.header)}}
                   <Button @click="see(item.id)" size="small" type="primary">查看数据</Button>
                 </p>
               </Panel>
@@ -32,10 +47,10 @@
         <TabPane :label="'警告:'+warmCount" name="name2">
           <Collapse accordion>
             <Panel v-for="(item,index) of warmList" :key="index">
-                {{item.name}}{{item.time|format}}
+                {{item.name}}@{{item.date|format}};ip:{{item.ip}}
                 <p slot="content" class="txts">
-                  {{item.url}}<br />
-                  {{JSON.stringify(item.headers)}}
+                  请求地址:{{item.url}}<br />
+                  {{JSON.stringify(item.header)}}
                   <Button @click="see(item.id)" size="small" type="primary">查看数据</Button>
                 </p>
                 </Panel>
@@ -44,10 +59,10 @@
         <TabPane :label="'消息:'+infoCount" name="name3">
           <Collapse accordion>
             <Panel v-for="(item,index) of infoList" :key="index">
-                  {{item.name}}{{item.time |format}}
+                  {{item.name}}@{{item.date |format}};ip:{{item.ip}}
                   <p slot="content" class="txts">
-                    {{item.url}}<br />
-                  {{JSON.stringify(item.headers)}}
+                    请求地址:{{item.url}}<br />
+                  {{JSON.stringify(item.header)}}
                   <Button @click="see(item.id)" size="small" type="primary">查看数据</Button>
                   </p>
               </Panel>
@@ -64,13 +79,14 @@ import request from "../common/request";
 
 // const test_url = "http://127.0.0.1:8090/api";
 const test_url = "api";
-const socketuri = window.location.origin + window.location.pathname;
+// const socketuri = window.location.origin + window.location.pathname;
 // const socketuri = "http://l-php40.ops.bj2.daling.com:8002";
-// const socketuri = "http://127.0.0.1:8090";
+const socketuri = "http://127.0.0.1:8090";
 
-let socket_path='/socket.io';
-if(window.location.pathname.indexOf('rnmonitor')>=0){
-  socket_path="/rnmonitor/socket.io"
+let socket_path = "/socket.io";
+let socket;
+if (window.location.pathname.indexOf("rnmonitor") >= 0) {
+  socket_path = "/rnmonitor/socket.io";
 }
 export default {
   name: "index",
@@ -83,7 +99,9 @@ export default {
       infoList: [],
       infoCount: 0,
       formData: {
-        name: ""
+        name: "",
+        tag: "",
+        ip: ""
       },
       columns: [
         {
@@ -120,14 +138,17 @@ export default {
     };
   },
   async mounted() {
-    var socket = socketio(socketuri, {
-      path:socket_path,
+    this.refresh();
+    socket = socketio(socketuri, {
+      path: socket_path,
       query: {
         token: "client"
       }
     });
     socket.on("info", data => {
-      data.time = new Date();
+      if (this.formData.tag && data.header.name != this.formData.tag) return;
+      if (this.formData.ip && data.ip.indexOf(this.formData.ip) < 0) return;
+
       this.infoList.unshift(data);
       if (this.infoList.length > 99) {
         this.infoList.pop();
@@ -136,7 +157,8 @@ export default {
       }
     });
     socket.on("warm", data => {
-      data.time = new Date();
+      if (this.formData.tag && data.header.name != this.formData.tag) return;
+      if (this.formData.ip && data.ip.indexOf(this.formData.ip) < 0) return;
       this.warmList.unshift(data);
       if (this.warmList.length > 99) {
         this.warmList.pop();
@@ -145,7 +167,8 @@ export default {
       }
     });
     socket.on("err", data => {
-      data.time = new Date();
+      if (this.formData.tag && data.header.name != this.formData.tag) return;
+      if (this.formData.ip && data.ip.indexOf(this.formData.ip) < 0) return;
       this.errList.unshift(data);
       if (this.errList.length > 99) {
         this.errList.pop();
@@ -153,19 +176,25 @@ export default {
         this.errCount++;
       }
     });
-    this.refresh();
   },
   methods: {
     async refresh() {
       let res = await request.getJson(test_url + "/get");
       this.namelist = res.data;
-      let msgs=await request.getJson(test_url+'/getlist');
+
+      let msgs = await request.getJson(test_url + "/getlist");
       for (let index = 0; index < msgs.data.length; index++) {
         const item = msgs.data[index];
         item.time = new Date();
-        this.infoList.unshift(item)
+        this.infoList.unshift(item);
       }
-      this.infoCount+=msgs.data.length;
+      this.infoCount += msgs.data.length;
+    },
+    //clear
+    start() {
+      this.errList = [];
+      this.warmList = [];
+      this.infoList = [];
     },
     async addName() {
       if (!this.formData.name) return;
@@ -179,18 +208,19 @@ export default {
       var name = this.namelist.splice(index, 1);
       request.getJson(test_url + "/del?name=" + name[0].name);
     },
-    async see(id){
-      let res = await request.getJson(test_url + "/getData?id="+id);
-      if(res&&res.code==1){
+    async see(id) {
+      let res = await request.getJson(test_url + "/getData?id=" + id);
+      if (res && res.code == 1) {
         this.$Modal.info({
-            title: "数据",
-            content: JSON.stringify(res.data)
+          title: "数据",
+          content: JSON.stringify(res.data)
         });
       }
     }
   },
   filters: {
     format(v) {
+      var v = new Date(v);
       let str = "yyyy-MM-dd hh:mm:ss";
       str = str.replace("yyyy", v.getFullYear());
       str = str.replace("MM", v.getMonth() + 1);
@@ -226,5 +256,4 @@ export default {
 .setting {
   width: 300px;
 }
-
 </style>
