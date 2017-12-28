@@ -148,7 +148,7 @@ export default {
     socket.on("info", data => {
       if (this.formData.tag && data.header.name != this.formData.tag) return;
       if (this.formData.ip && data.ip.indexOf(this.formData.ip) < 0) return;
-
+      console.log(data);
       this.infoList.unshift(data);
       if (this.infoList.length > 99) {
         this.infoList.pop();
@@ -159,6 +159,7 @@ export default {
     socket.on("warm", data => {
       if (this.formData.tag && data.header.name != this.formData.tag) return;
       if (this.formData.ip && data.ip.indexOf(this.formData.ip) < 0) return;
+      console.log(data);
       this.warmList.unshift(data);
       if (this.warmList.length > 99) {
         this.warmList.pop();
@@ -169,6 +170,7 @@ export default {
     socket.on("err", data => {
       if (this.formData.tag && data.header.name != this.formData.tag) return;
       if (this.formData.ip && data.ip.indexOf(this.formData.ip) < 0) return;
+      console.log(data);
       this.errList.unshift(data);
       if (this.errList.length > 99) {
         this.errList.pop();
