@@ -79,9 +79,9 @@ import request from "../common/request";
 
 // const test_url = "http://127.0.0.1:8090/api";
 const test_url = "api";
-// const socketuri = window.location.origin + window.location.pathname;
+const socketuri = window.location.origin + window.location.pathname;
 // const socketuri = "http://l-php40.ops.bj2.daling.com:8002";
-const socketuri = "http://127.0.0.1:8090";
+// const socketuri = "http://127.0.0.1:8090";
 
 let socket_path = "/socket.io";
 let socket;
