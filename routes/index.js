@@ -130,7 +130,7 @@ function comb(req, tag) {
     url: req.body.url,
     opt: req.body.opt,
     header: req.headers,
-    ip: req.ip,
+    ip: req.headers["x-real-ip"] || req.ip,
     date: new Date().getTime()
   }
   setCache(data);
