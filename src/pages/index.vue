@@ -36,11 +36,15 @@
           <Collapse accordion>
               <Panel v-for="(item,index) of errList" :key="index">
               {{item.name}}@{{item.date|format}};ip:{{item.ip}}
-                <p slot="content" class="txts">
-                  请求地址:{{item.url}}<br />
-                  {{JSON.stringify(item.header)}}
+               <div slot="content" class="txts">
+                    请求地址:{{item.url}}<br />
+                   <Row class="list_box">
+                     <Col class="list_item" span="12" v-for="(item,key) in item.header" key="key">
+                      {{key}}:{{item}}
+                     </Col>
+                  </Row>
                   <Button @click="see(item.id)" size="small" type="primary">查看数据</Button>
-                </p>
+                  </div>
               </Panel>
         </Collapse>
         </TabPane>
@@ -48,11 +52,15 @@
           <Collapse accordion>
             <Panel v-for="(item,index) of warmList" :key="index">
                 {{item.name}}@{{item.date|format}};ip:{{item.ip}}
-                <p slot="content" class="txts">
-                  请求地址:{{item.url}}<br />
-                  {{JSON.stringify(item.header)}}
+                <div slot="content" class="txts">
+                    请求地址:{{item.url}}<br />
+                   <Row class="list_box">
+                     <Col class="list_item" span="12" v-for="(item,key) in item.header" key="key">
+                      {{key}}:{{item}}
+                     </Col>
+                  </Row>
                   <Button @click="see(item.id)" size="small" type="primary">查看数据</Button>
-                </p>
+                  </div>
                 </Panel>
         </Collapse>
         </TabPane>
@@ -60,11 +68,15 @@
           <Collapse accordion>
             <Panel v-for="(item,index) of infoList" :key="index">
                   {{item.name}}@{{item.date |format}};ip:{{item.ip}}
-                  <p slot="content" class="txts">
+                  <div slot="content" class="txts">
                     请求地址:{{item.url}}<br />
-                  {{JSON.stringify(item.header)}}
+                   <Row class="list_box">
+                     <Col class="list_item" span="12" v-for="(item,key) in item.header" key="key">
+                      {{key}}:{{item}}
+                     </Col>
+                  </Row>
                   <Button @click="see(item.id)" size="small" type="primary">查看数据</Button>
-                  </p>
+                  </div>
               </Panel>
           </Collapse>
         </TabPane>
@@ -257,5 +269,16 @@ export default {
 }
 .setting {
   width: 300px;
+}
+.list_box {
+  border: solid 1px #ccc;
+  border-bottom: none;
+}
+.list_item {
+  border-bottom: solid 1px #ccc;
+  padding: 5px;
+}
+.list_item:nth-child(2n) {
+  border-left: solid 1px #ccc;
 }
 </style>
