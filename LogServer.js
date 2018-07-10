@@ -31,6 +31,12 @@ module.exports = new class {
       system: "",
       webkit: "",
     }
+    let data = {
+      code: 200,
+      title: "测试错误",
+      data: {},
+      data2: {}
+    }
     let system_match = model.agent.match(/(\(.+?\))/g);
     if (system_match.length > 0) {
       model.system = system_match[0];
